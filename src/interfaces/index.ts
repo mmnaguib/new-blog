@@ -4,4 +4,6 @@ export interface IPost {
   content: string;
   author: string;
   date: string;
+  image: string;
+  facebookProfile: string;
 }

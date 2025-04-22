@@ -3,7 +3,7 @@ import "./login.css";
 import { useState } from "react";
 import { Button, TextBox } from "devextreme-react";
 const Login = () => {
-  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,11 +17,12 @@ const Login = () => {
         </p>
         <form className="login-form" onSubmit={handleLogin}>
           <div className="inputContent">
-            <label>اسم المستخدم</label>
+            <label>البريد الالكتروني</label>
             <TextBox
-              value={username}
-              onValueChanged={(e) => setUsername(e.value)}
+              value={email}
+              onValueChanged={(e) => setEmail(e.value)}
               placeholder="اسم المستخدم"
+              mode="email"
             />
           </div>
           <div className="inputContent">
