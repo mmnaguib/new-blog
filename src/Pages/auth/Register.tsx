@@ -1,13 +1,34 @@
-import { Link } from "react-router-dom";
-import "./login/login.css";
+import { Link, useNavigate } from "react-router-dom";
+import "./auth.css";
 import { useState } from "react";
 import { Button, TextBox } from "devextreme-react";
+import axios from "axios";
+import { toast } from "react-toastify";
 const Register = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [username, setUsername] = useState<string>("");
-  const handleLogin = (e: React.FormEvent) => {
+  const navigate = useNavigate();
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    const user = {
+      email: email,
+      password: password,
+      username: username,
+    };
+    const res = await axios.post(
+      "http://localhost:5000/api/auth/register",
+      user
+    );
+    if (res.status === 201) {
+      navigate("/login");
+      setEmail("");
+      setPassword("");
+      setUsername("");
+      toast.success("User registered successfully");
+    } else {
+      toast.error("Error registering user");
+    }
   };
   return (
     <div className="login-content">
@@ -16,7 +37,7 @@ const Register = () => {
         <p className="formPara">
           نظام متكامل يعطيك التحكم الكامل في إدارة المقالات الخاصة بك.
         </p>
-        <form className="login-form" onSubmit={handleLogin}>
+        <form className="login-form" onSubmit={handleRegister}>
           <div className="inputContent">
             <label>البريد الالكتروني</label>
             <TextBox
@@ -43,11 +64,16 @@ const Register = () => {
               placeholder="اسم المستخدم"
             />
           </div>
-          <Button useSubmitBehavior className="subimitBtn">
+          <Button
+            type="success"
+            useSubmitBehavior
+            className="subimitBtn"
+            width={150}
+          >
             دخول
           </Button>
         </form>
-        <Link className="registerBtn" to="/login">
+        <Link type="success" className="registerBtn" to="/login">
           سجل دخول
         </Link>
       </div>

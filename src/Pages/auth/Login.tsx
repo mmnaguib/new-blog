@@ -1,12 +1,32 @@
-import { Link } from "react-router-dom";
-import "./login.css";
+import { Link, useNavigate } from "react-router-dom";
+import "./auth.css";
 import { useState } from "react";
 import { Button, TextBox } from "devextreme-react";
+import axios from "axios";
+import { toast } from "react-toastify";
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const handleLogin = (e: React.FormEvent) => {
+  const navigate = useNavigate();
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    const user = {
+      email: email,
+      password: password,
+    };
+    const res = await axios.post("http://localhost:5000/api/auth/login", user);
+    if (res.status === 200) {
+      navigate("/");
+      setEmail("");
+      setPassword("");
+      toast.success("User Login successfully");
+      localStorage.setItem("newBlogToken", res.data.token);
+      localStorage.setItem("loginUserData", JSON.stringify(res.data.user));
+      localStorage.setItem("isLoggedIn", "true");
+      window.dispatchEvent(new Event("login"));
+    } else {
+      toast.error("Error Login user");
+    }
   };
   return (
     <div className="login-content">
@@ -34,7 +54,12 @@ const Login = () => {
               placeholder="كلمة المرور"
             />
           </div>
-          <Button useSubmitBehavior className="subimitBtn">
+          <Button
+            type="success"
+            useSubmitBehavior
+            className="subimitBtn"
+            width={150}
+          >
             دخول
           </Button>
         </form>
