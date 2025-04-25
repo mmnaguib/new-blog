@@ -1,31 +1,65 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IPost } from "../../interfaces";
+import { IComment, IPost } from "../../interfaces";
 import postsApi from "../../services/posts";
-import { Button, TextBox } from "devextreme-react";
+import { Button, Popup, TextBox } from "devextreme-react";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
+import { getTimeDifference } from "../../utils";
+import Comments from "./Comments";
 
 const Blog = () => {
   const { id } = useParams();
   const [post, setPost] = useState<IPost | null>(null);
-  const [comment, setComment] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [showReactions, setShowReactions] = useState(false);
+
   const reactionsList = [
-    { type: "like", icon: "fa-thumbs-up", label: "Like", color: "#1877f2" }, // أزرق فيسبوك
-    { type: "love", icon: "fa-heart", label: "Love", color: "#f02849" }, // أحمر
-    { type: "haha", icon: "fa-face-smile", label: "Haha", color: "#f7b125" }, // أصفر
-    { type: "angry", icon: "fa-face-angry", label: "Angry", color: "#e9710f" }, // برتقالي غامق
+    { type: "like", icon: "fa-thumbs-up", label: "Like", color: "#1877f2" },
+    { type: "love", icon: "fa-heart", label: "Love", color: "#f02849" },
+    { type: "haha", icon: "fa-face-smile", label: "Haha", color: "#f7b125" },
+    { type: "angry", icon: "fa-face-angry", label: "Angry", color: "#e9710f" },
   ];
 
   const [selectedReaction, setSelectedReaction] = useState<string | null>(null);
   const currentIcon = reactionsList.find((r) => r.type === selectedReaction);
+  const userData = JSON.parse(localStorage.getItem("loginUserData") || "{}");
+
   const getPost = async (id: string) => {
     const res = await postsApi.getPost(id);
     setPost(res);
+
+    const userReact = res.reactions.find((r: any) =>
+      r.userIds.includes(userData.id)
+    );
+
+    if (userReact) {
+      setSelectedReaction(userReact.type);
+    } else {
+      setSelectedReaction(null);
+    }
   };
+
+  const reactionCount = (type: string) => {
+    return post?.reactions.filter((r) => r.type === type).length || 0;
+  };
+
   useEffect(() => {
-    getPost(String(id));
-  }, [id]);
+    getPost(id!);
+  }, [id!]);
+
+  const handleReact = async (postId: string, type: string, userId: string) => {
+    const newType = selectedReaction === type ? null : type;
+
+    await axios.post(`http://localhost:5000/api/reactions/${postId}/react`, {
+      type,
+      userId,
+    });
+
+    await getPost(postId);
+    setSelectedReaction(newType);
+  };
+
   return (
     <>
       {post?.title}
@@ -33,7 +67,11 @@ const Blog = () => {
       {post?.content}
       <br />
       {post?.authorId}
-      <div className="reacts" style={{ textAlign: "center" }}>
+      <div className="postAction">
+        <div onClick={() => setIsOpen(true)} style={{ cursor: "pointer" }}>
+          Comment
+          <i className="fa-regular fa-comment fa-2x"></i>
+        </div>
         <div
           className="reaction-container"
           onMouseEnter={() => setShowReactions(true)}
@@ -49,6 +87,7 @@ const Blog = () => {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 300 }}
+            onClick={() => handleReact(String(post?._id), "like", userData.id)}
           />
 
           <AnimatePresence>
@@ -61,15 +100,22 @@ const Blog = () => {
                 transition={{ duration: 0.2 }}
               >
                 {reactionsList.map((reaction) => (
-                  <>
+                  <div key={reaction.type}>
                     <motion.i
-                      key={reaction.type}
                       className={`fa-solid ${reaction.icon} fa-2x`}
-                      onClick={() => setSelectedReaction(reaction.type)}
+                      style={{ color: reaction.color }}
+                      onClick={() =>
+                        handleReact(
+                          String(post?._id),
+                          reaction.type,
+                          userData.id
+                        )
+                      }
                       whileHover={{ scale: 1.3 }}
                       whileTap={{ scale: 0.9 }}
                     />
-                  </>
+                    {reactionCount(reaction.type)}
+                  </div>
                 ))}
               </motion.div>
             )}
@@ -77,22 +123,7 @@ const Blog = () => {
         </div>
       </div>
 
-      <div className="commentForm">
-        <form action="">
-          <TextBox
-            value={comment}
-            onValueChanged={(e) => setComment(e.value)}
-            placeholder="Comment"
-          />
-          <Button useSubmitBehavior>Send</Button>
-        </form>
-      </div>
-      <div className="comments">
-        <div className="comment" style={{ display: "flex" }}>
-          <i className="fa-solid fa-user"></i>
-          <p>Comment 1</p>
-        </div>
-      </div>
+      <Comments isOpen={isOpen} setIsOpen={setIsOpen} id={id!} />
     </>
   );
 };

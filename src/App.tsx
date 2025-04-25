@@ -7,6 +7,7 @@ import AdminDashboard from "./Pages/AdminDashboard";
 import "devextreme/dist/css/dx.light.css";
 import Blog from "./Pages/home/Blog";
 import { ToastContainer } from "react-toastify";
+import NewPost from "./Pages/home/NewPost";
 function App() {
   return (
     <>
@@ -19,6 +20,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/:id" element={<Blog />} />
+            <Route path="/create" element={<NewPost />} />
             {/* Add other routes here */}
           </Routes>
         </div>

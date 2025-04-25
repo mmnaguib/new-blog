@@ -15,7 +15,10 @@ export interface IPost {
 export interface IComment {
   _id: string | number;
   postId: string | number;
-  userId: string | number;
+  userId: {
+    _id: string;
+    username: string;
+  };
   content: string;
   date: string;
 }
