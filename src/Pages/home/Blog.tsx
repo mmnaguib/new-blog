@@ -60,13 +60,14 @@ const Blog = () => {
     setSelectedReaction(newType);
   };
 
+  console.log(post);
   return (
     <>
       {post?.title}
       <br />
       {post?.content}
       <br />
-      {post?.authorId}
+      {post?.authorId?.username}
       <div className="postAction">
         <div onClick={() => setIsOpen(true)} style={{ cursor: "pointer" }}>
           Comment

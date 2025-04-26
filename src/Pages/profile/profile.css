@@ -1,0 +1,18 @@
+.editProfileForm{
+    width: 50%;
+    margin: 50px auto;
+    box-shadow: 0 0 5px 5px #eaeaea;
+    padding: 20px;
+    border-radius: 15px;
+    position: relative;
+}
+
+.editProfileForm .divContent{
+    margin-bottom: 10px;
+}
+
+.editProfileForm img{
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+}

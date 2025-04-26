@@ -2,7 +2,7 @@ export interface IPost {
   _id: string | number;
   title: string;
   content: string;
-  authorId: number;
+  authorId: IUser;
   date: string;
   image: string;
   type: string;
@@ -18,6 +18,7 @@ export interface IComment {
   userId: {
     _id: string;
     username: string;
+    image: string;
   };
   content: string;
   date: string;
@@ -39,4 +40,13 @@ export interface IUser {
   phone?: string;
 }
 
+export interface IProfile {
+  user: {
+    _id: number;
+    username: string;
+    email: string;
+    image?: string;
+    phone?: string;
+  };
+}
 export const checkLogin = localStorage.getItem("newBlogToken") ? true : false;

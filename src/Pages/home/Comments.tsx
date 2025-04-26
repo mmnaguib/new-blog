@@ -3,6 +3,7 @@ import { Button, Popup, TextBox } from "devextreme-react";
 import React, { useEffect, useState } from "react";
 import { IComment } from "../../interfaces";
 import { getTimeDifference } from "../../utils";
+import { Link } from "react-router-dom";
 
 export interface IProps {
   isOpen: boolean;
@@ -71,7 +72,16 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
           {comments.map((c) => (
             <>
               <div className="comment" key={c._id}>
-                <i className="fa-solid fa-user userImage"></i>
+                {c.userId.image ? (
+                  <img
+                    src={`http://localhost:5000/uploads/${c.userId.image}`}
+                    className="userImage"
+                    alt="User"
+                  />
+                ) : (
+                  <i className="fa-solid fa-user userImage"></i>
+                )}
+
                 {editingCommentId === c._id ? (
                   <>
                     <TextBox
@@ -91,7 +101,9 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
                 ) : (
                   <>
                     <div className="userComment">
-                      <span>{c.userId.username}</span>
+                      <Link to={`/profile/${c.userId._id}`}>
+                        {c.userId.username}
+                      </Link>
                       <p style={{ margin: 0 }}>{c.content}</p>
                     </div>
                     <div className="dateAndActions">
