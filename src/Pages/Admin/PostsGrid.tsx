@@ -6,10 +6,15 @@ import postsApi from "../../services/posts";
 import { gridTabs } from "../../utils/data";
 import { useNavigate } from "react-router-dom";
 import NewPost from "../home/NewPost";
+import EditBlog from "../home/EditBlog";
+import axiosInstance from "../../utils/axiosInstance";
+import { toast } from "react-toastify";
 
 const PostsGrid = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
+  const [editPost, setEditPost] = useState("");
   const navigate = useNavigate();
 
   const getAllPosts = async () => {
@@ -20,6 +25,16 @@ const PostsGrid = () => {
     getAllPosts();
   }, []);
 
+  const handlePostEdit = (val: string) => {
+    setEditPost(val);
+    setIsOpen(true);
+  };
+
+  const deletePost = async (val: string) => {
+    await axiosInstance.delete(`/api/posts/${val}`);
+    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== val));
+    toast.success("تم حذف البوست بنجاح");
+  };
   return (
     <>
       <Button
@@ -84,13 +99,13 @@ const PostsGrid = () => {
           alignment="center"
         />
         <Column
-          dataField="comments"
+          dataField="comments.length"
           caption="عدد التعليقات"
           width={250}
           alignment="center"
         />
         <Column
-          dataField="reactions"
+          dataField="reactions.length"
           caption="عدد التفاعلات"
           width={250}
           alignment="center"
@@ -103,13 +118,13 @@ const PostsGrid = () => {
             return (
               <div className="flex space-x-2">
                 <Button
-                  onClick={() => navigate(`/editPost/${rowData.data._id}`)}
+                  onClick={() => handlePostEdit(rowData.data._id)}
                   type="default"
                 >
                   تعديل
                 </Button>
                 <Button
-                  onClick={() => navigate(`/deletePost/${rowData.data._id}`)}
+                  onClick={() => deletePost(`${rowData.data._id}`)}
                   type="danger"
                 >
                   حذف
@@ -121,6 +136,11 @@ const PostsGrid = () => {
       </DataGrid>
 
       <NewPost isOpen={isOpen} setIsOpen={setIsOpen} />
+      <EditBlog
+        isOpenEdit={isOpenEdit}
+        setIsOpenEdit={setIsOpenEdit}
+        editPost={editPost}
+      />
     </>
   );
 };

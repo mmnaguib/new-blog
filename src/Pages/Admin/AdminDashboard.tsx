@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { gridTabs } from "../../utils/data";
 import PostsGrid from "./PostsGrid";
 import UserGrid from "./UserGrid";
+import { JSX } from "react";
 
 const AdminDashboard = () => {
   interface TabData {
