@@ -2,8 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import "./auth.css";
 import { useState } from "react";
 import { Button, TextBox } from "devextreme-react";
-import axios from "axios";
 import { toast } from "react-toastify";
+import axiosInstance from "../../utils/axiosInstance";
 const Register = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -16,10 +16,7 @@ const Register = () => {
       password: password,
       username: username,
     };
-    const res = await axios.post(
-      "http://localhost:5000/api/auth/register",
-      user
-    );
+    const res = await axiosInstance.post("api/auth/register", user);
     if (res.status === 201) {
       navigate("/login");
       setEmail("");

@@ -2,27 +2,26 @@ import { IPost } from "../interfaces";
 import FaceBook from "../assetst/facebook.jpeg";
 import { useNavigate } from "react-router-dom";
 import { Button } from "devextreme-react";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axiosInstance from "../utils/axiosInstance";
+import { baseURL } from "../utils";
 
 const PostCard = ({ post }: { post: IPost }) => {
   const navigate = useNavigate();
   const [count, setCount] = useState(0);
   const commentCount = async (postId: string) => {
-    const res = await axios.get(
-      `http://localhost:5000/api/comments/${postId}/count`
-    );
+    const res = await axiosInstance.get(`api/comments/${postId}/count`);
     setCount(res.data.count);
   };
   useEffect(() => {
     commentCount(String(post._id));
-  }, []);
+  }, [post._id]);
   return (
     <>
       <div className="blog-content">
         <img
           className="charachter-image"
-          src={`http://localhost:5000/uploads/${post.image}`}
+          src={`${baseURL}/uploads/${post.image}`}
           alt="charachter"
           width="100"
           height="100%"
@@ -50,7 +49,6 @@ const PostCard = ({ post }: { post: IPost }) => {
             className="blogButton"
           />
         )}
-        {/* <span className="blog-author">{post.author}</span> */}
         <a href={post.facebookProfile} target="_blank" rel="noreferrer">
           <img
             className="facebookImage"

@@ -1,12 +1,3 @@
-.pageTitle {
-  color: #1d4ed8;
-  text-align: center;
-  font-size: 30px;
-  border-bottom: 3px solid #3b82f6;
-  width: fit-content;
-  margin: 20px auto;
-  padding-bottom: 5px;
-}
 .blogs-Containter {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -120,11 +111,11 @@
 .commentForm {
   position: absolute;
   width: 96%;
-    bottom: 2%;
-    right: 2%;
+  bottom: 2%;
+  right: 2%;
 }
-.dx-popup-content{
-max-height: 350px !important;
+.postAction .dx-popup-content {
+  max-height: 350px !important;
 }
 
 .commentForm form {
@@ -132,24 +123,24 @@ max-height: 350px !important;
   gap: 10px;
 }
 
-.commentForm .dx-textbox.dx-texteditor{
+.commentForm .dx-textbox.dx-texteditor {
   flex-grow: 1;
 }
-.comment{
+.comment {
   position: relative;
   margin-bottom: 15px;
 }
-.userImage{
-    border: 1px solid #eaeaae;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
-    border-radius: 50%;
-    position: absolute;
+.userImage {
+  border: 1px solid #eaeaae;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 50%;
+  position: absolute;
 }
 
-.userComment{
+.userComment {
   display: flex;
   flex-direction: column;
   border: 1px solid #eaeaea;
@@ -158,10 +149,10 @@ max-height: 350px !important;
   padding: 5px;
   margin-right: 35px;
 }
-.userComment span{
+.userComment span {
   font-weight: bold;
 }
-.dateAndActions{
+.dateAndActions {
   position: absolute;
   left: -5px;
   bottom: -27px;
@@ -169,11 +160,11 @@ max-height: 350px !important;
   gap: 5px;
 }
 
-.actionBtn .dx-button-content{
+.actionBtn .dx-button-content {
   padding: 1px 5px !important;
 }
 
-.postAction{
+.postAction {
   display: flex;
   width: fit-content;
   padding: 0;
@@ -192,6 +183,24 @@ max-height: 350px !important;
   justify-content: center;
 }
 
-.postAction > div:first-of-type{
+.postAction > div:first-of-type {
   border-right: 0;
 }
+
+.addPostContainer {
+  margin: auto;
+  box-shadow: 0 0 5px 5px #eaeaea;
+  padding: 20px;
+  border-radius: 15px;
+  position: relative;
+}
+
+.addPostContainer .divContent {
+  margin-bottom: 10px;
+}
+
+/* .addPostContainer img{
+  position: absolute;
+  bottom: -20px;
+  left: -20px;
+} */

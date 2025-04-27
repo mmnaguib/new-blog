@@ -13,3 +13,5 @@ export const getTimeDifference = (dateString: string) => {
   if (minutes > 0) return ` ${minutes} دقيقة`;
   return ` لحظات`;
 };
+
+export const baseURL = "http://localhost:5000";

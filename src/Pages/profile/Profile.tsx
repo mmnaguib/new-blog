@@ -1,8 +1,9 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, FileUploader, TextBox } from "devextreme-react";
 import { IProfile } from "../../interfaces";
 import "./profile.css";
+import axiosInstance from "../../utils/axiosInstance";
+import { baseURL } from "../../utils";
 const Profile = () => {
   const [profileData, setProfileData] = useState<IProfile | null>(null);
   const [editUserName, setEditUserName] = useState("");
@@ -10,18 +11,18 @@ const Profile = () => {
   const [phone, setPhone] = useState("");
   const [image, setImage] = useState<File | string>("");
   const token = localStorage.getItem("newBlogToken");
-  const profileDataFunc = async () => {
-    const res = await axios.get("http://localhost:5000/api/auth/me", {
+  const profileDataFunc = useCallback(async () => {
+    const res = await axiosInstance.get("api/auth/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     setProfileData(res.data);
-  };
+  }, [token]);
 
   useEffect(() => {
     profileDataFunc();
-  }, []);
+  }, [profileDataFunc]);
 
   useEffect(() => {
     if (profileData) {
@@ -39,7 +40,7 @@ const Profile = () => {
     formData.append("email", editUserEmail);
     formData.append("phone", phone);
     if (image) formData.append("image", image);
-    const res = await axios.put("http://localhost:5000/api/auth/me", formData, {
+    await axiosInstance.put("api/auth/me", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
@@ -48,9 +49,7 @@ const Profile = () => {
   };
   return (
     <div className="editProfileForm">
-      <h2 style={{ marginTop: 0, textAlign: "center" }}>
-        تعديل بيانات المستخدم
-      </h2>
+      <h2 className="pageHeader">تعديل بيانات المستخدم</h2>
       <form onSubmit={editProfile}>
         <div className="divContent">
           <label>اسم المستخدم</label>
@@ -91,7 +90,7 @@ const Profile = () => {
           }}
         />
         <img
-          src={`http://localhost:5000/uploads/${image}`}
+          src={`${baseURL}/uploads/${image}`}
           width={80}
           height={80}
           alt="profile"

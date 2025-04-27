@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IComment, IPost } from "../../interfaces";
+import { IPost } from "../../interfaces";
 import postsApi from "../../services/posts";
-import { Button, Popup, TextBox } from "devextreme-react";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
-import { getTimeDifference } from "../../utils";
 import Comments from "./Comments";
+import axiosInstance from "../../utils/axiosInstance";
 
 const Blog = () => {
   const { id } = useParams();
@@ -46,12 +44,12 @@ const Blog = () => {
 
   useEffect(() => {
     getPost(id!);
-  }, [id!]);
+  }, [id]);
 
   const handleReact = async (postId: string, type: string, userId: string) => {
     const newType = selectedReaction === type ? null : type;
 
-    await axios.post(`http://localhost:5000/api/reactions/${postId}/react`, {
+    await axiosInstance.post(`api/reactions/${postId}/react`, {
       type,
       userId,
     });
@@ -122,9 +120,8 @@ const Blog = () => {
             )}
           </AnimatePresence>
         </div>
+        <Comments isOpen={isOpen} setIsOpen={setIsOpen} id={id!} />
       </div>
-
-      <Comments isOpen={isOpen} setIsOpen={setIsOpen} id={id!} />
     </>
   );
 };

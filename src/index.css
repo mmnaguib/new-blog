@@ -1,5 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Cairo:wght@200..1000&display=swap");
 * {
   box-sizing: border-box;
+  font-family: "Alexandria", sans-serif;
 }
 body {
   margin: 0;
@@ -11,6 +13,7 @@ body {
   direction: rtl;
   padding: 0;
   margin: 0;
+  font-family: "Alexandria", sans-serif;
 }
 
 code {
@@ -20,4 +23,42 @@ code {
 
 .app-container {
   height: calc(100vh - 115px);
+  font-family: "Alexandria", sans-serif;
+  width: 98%;
+  margin: auto;
+}
+label {
+  font-size: 16px;
+  margin-bottom: 7px;
+  display: inline-block;
+}
+
+.pageHeader {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+  width: fit-content;
+  margin: 20px auto;
+  border: 2px solid #5787f1;
+  padding: 15px 40px;
+  border-radius: 25px;
+  color: #234389;
+}
+
+.pageHeader::after,
+.pageHeader::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: absolute;
+  left: -11px;
+  background-color: #2563eb;
+  top: 20px;
+}
+.pageHeader::before {
+  right: -11px;
 }

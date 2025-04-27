@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./navbar.css";
 import { DropDownButton } from "devextreme-react";
+import { color } from "framer-motion";
+import { profileMenuItems } from "../../utils/data";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,12 +33,6 @@ const Navbar = () => {
     };
   }, []);
 
-  const profileMenuItems = [
-    { id: 1, name: "الملف الشخصي", link: "/profile" },
-    { id: 2, name: "الإعدادات", link: "/settings" },
-    { id: 3, name: "تسجيل الخروج", action: "logout" }, // عنصر خاص
-  ];
-
   const handleProfileMenuClick = (e: any) => {
     const { link, action } = e.itemData;
 
@@ -64,13 +60,14 @@ const Navbar = () => {
         {!isLoggedIn && <NavLink to="/login">تسجيل الدخول</NavLink>}
         {isLoggedIn && (
           <DropDownButton
-            text="الحساب"
+            text="حسابك"
             items={profileMenuItems}
             displayExpr="name"
             keyExpr="id"
             onItemClick={handleProfileMenuClick}
             stylingMode="text"
             icon="user"
+            style={{ color: "white" }}
           />
         )}
       </div>

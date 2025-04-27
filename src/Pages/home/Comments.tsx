@@ -1,9 +1,9 @@
-import axios from "axios";
 import { Button, Popup, TextBox } from "devextreme-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IComment } from "../../interfaces";
-import { getTimeDifference } from "../../utils";
+import { baseURL, getTimeDifference } from "../../utils";
 import { Link } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance";
 
 export interface IProps {
   isOpen: boolean;
@@ -18,20 +18,20 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editedContent, setEditedContent] = useState<string>("");
   const getAllComments = async (postId: string) => {
-    const res = await axios.get(`http://localhost:5000/api/comments/${postId}`);
+    const res = await axiosInstance.get(`api/comments/${postId}`);
     setComments(res.data);
   };
 
   useEffect(() => {
     getAllComments(id!);
-  }, []);
+  }, [id]);
 
   const addComment = async (
     postId: string,
     comment: string,
     userId: string
   ) => {
-    await axios.post(`http://localhost:5000/api/comments/${postId}`, {
+    await axiosInstance.post(`api/comments/${postId}`, {
       content: comment,
       userId: userId,
     });
@@ -45,7 +45,7 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
   };
 
   const saveEdit = async (commentId: string) => {
-    await axios.put(`http://localhost:5000/api/comments/${commentId}`, {
+    await axiosInstance.put(`api/comments/${commentId}`, {
       content: editedContent,
     });
     setEditingCommentId(null);
@@ -54,7 +54,7 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
   };
 
   const handleDelete = async (commentId: string) => {
-    await axios.delete(`http://localhost:5000/api/comments/${commentId}`);
+    await axiosInstance.delete(`api/comments/${commentId}`);
     await getAllComments(id!);
   };
 
@@ -74,7 +74,7 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
               <div className="comment" key={c._id}>
                 {c.userId.image ? (
                   <img
-                    src={`http://localhost:5000/uploads/${c.userId.image}`}
+                    src={`${baseURL}/uploads/${c.userId.image}`}
                     className="userImage"
                     alt="User"
                   />

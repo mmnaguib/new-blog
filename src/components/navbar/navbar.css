@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
-  background-color: #2563EB;
+  background-color: #2563eb;
   color: #fff;
   direction: ltr;
   height: 65px;
@@ -26,9 +26,11 @@
   font-size: 20px;
   direction: rtl;
   padding-bottom: 5px;
+  outline: none;
 }
 
 .navbar a.active {
   border-bottom: 1px solid #fff;
   color: black;
+  font-size: 20px;
 }
