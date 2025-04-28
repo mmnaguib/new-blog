@@ -17,9 +17,13 @@ const UserGrid = () => {
     getAllUsers();
   }, []);
 
-  const deleteUser = async (val: string) => {
-    await axiosInstance.delete(`/api/auth/user/${val}`);
-    setUsers((prevUsers) => prevUsers.filter((user) => user._id !== val));
+  const deleteUser = async (usrId: string) => {
+    await axiosInstance.delete(`/api/auth/user/${usrId}`);
+    setUsers((prevUsers) => prevUsers.filter((user) => user._id !== usrId));
+  };
+  const editUserRole = async (usrId: string) => {
+    await axiosInstance.put(`/api/auth/make-admin/${usrId}`);
+    getAllUsers();
   };
   return (
     <>
@@ -73,6 +77,13 @@ const UserGrid = () => {
                   type="danger"
                 >
                   حذف
+                </Button>
+                <Button
+                  onClick={() => editUserRole(`${rowData.data._id}`)}
+                  type="default"
+                  disabled={rowData.data.role == "admin"}
+                >
+                  تعديل دور المستخدم
                 </Button>
               </div>
             );

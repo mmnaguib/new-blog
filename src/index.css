@@ -25,7 +25,7 @@ code {
   height: calc(100vh - 115px);
   font-family: "Alexandria", sans-serif;
   width: 98%;
-  margin: auto;
+  margin: 80px auto 0;
 }
 label {
   font-size: 16px;

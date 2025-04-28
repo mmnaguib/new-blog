@@ -22,7 +22,7 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/:id" element={<Blog />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="profile/:id" element={<UserProfile />} />
+            <Route path="user/:id" element={<UserProfile />} />
             {/* Add other routes here */}
           </Routes>
         </div>

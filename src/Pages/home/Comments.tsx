@@ -71,10 +71,10 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
         <div className="comments">
           {comments.map((c) => (
             <>
-              <div className="comment" key={c._id}>
-                {c.userId.image ? (
+              <div className="comment" key={c?._id}>
+                {c.userId?.image ? (
                   <img
-                    src={`${baseURL}/uploads/${c.userId.image}`}
+                    src={`${baseURL}/uploads/${c.userId?.image}`}
                     className="userImage"
                     alt="User"
                   />
@@ -82,7 +82,7 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
                   <i className="fa-solid fa-user userImage"></i>
                 )}
 
-                {editingCommentId === c._id ? (
+                {editingCommentId === c?._id ? (
                   <>
                     <TextBox
                       value={editedContent}
@@ -91,7 +91,7 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
                     />
                     <Button
                       text="Save"
-                      onClick={() => saveEdit(String(c._id))}
+                      onClick={() => saveEdit(String(c?._id))}
                     />
                     <Button
                       text="Cancel"
@@ -101,24 +101,26 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
                 ) : (
                   <>
                     <div className="userComment">
-                      <Link to={`/profile/${c.userId._id}`}>
-                        {c.userId.username}
+                      <Link to={`/user/${c.userId?._id}`}>
+                        {c.userId?.username}
                       </Link>
                       <p style={{ margin: 0 }}>{c.content}</p>
                     </div>
                     <div className="dateAndActions">
                       <span>{getTimeDifference(c.date)}</span>
-                      {userData.id === c.userId._id && (
+                      {userData.id === c.userId?._id && (
                         <>
                           <Button
                             icon="edit"
-                            onClick={() => handleEdit(String(c._id), c.content)}
+                            onClick={() =>
+                              handleEdit(String(c?._id), c.content)
+                            }
                             className="actionBtn"
                             type="default"
                           />
                           <Button
                             icon="trash"
-                            onClick={() => handleDelete(String(c._id))}
+                            onClick={() => handleDelete(String(c?._id))}
                             className="actionBtn"
                             type="danger"
                           />

@@ -6,12 +6,15 @@ import { profileMenuItems } from "../../utils/data";
 import axiosInstance from "../../utils/axiosInstance";
 import { INotification } from "../../interfaces";
 import { getTimeDifference } from "../../utils";
+import Notifications from "./Notifications";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   const userData = JSON.parse(localStorage.getItem("loginUserData") || "{}");
   const navigate = useNavigate();
+  const [notificationDropDown, setNotificationDropDown] =
+    useState<boolean>(false);
 
   const checkLoginStatus = () => {
     const token = localStorage.getItem("newBlogToken");
@@ -54,52 +57,6 @@ const Navbar = () => {
     }
   };
 
-  const [notifications, setNotifications] = useState<INotification[]>([]);
-  const [notificationDropDown, setNotificationDropDown] = useState(false);
-  const getAllNotifiactions = async (userId: string) => {
-    const res = await axiosInstance.get(`api/notifications/${userId}`);
-    setNotifications(res.data);
-  };
-
-  useEffect(() => {
-    if (userData.id) getAllNotifiactions(userData.id);
-  }, [userData.id]);
-
-  const notificationContent =
-    notifications && notifications.length > 0 ? (
-      notifications.map((notification) => {
-        return (
-          <>
-            <div
-              key={notification._id}
-              className={`notification-item ${
-                notification.isRead ? "read" : "unread"
-              }`}
-              onClick={() => readNotification(notification._id)}
-            >
-              <a href={`/${notification.postId}`} style={{ color: "black" }}>
-                {notification.message}
-              </a>
-              <br />
-              <span className="notificationDate">
-                {getTimeDifference(notification.date)}
-              </span>
-            </div>
-            <hr style={{ width: "100%", margin: "0" }} />
-          </>
-        );
-      })
-    ) : (
-      <div style={{ background: "#fff", padding: "10px" }}>
-        لا توجد إشعارات جديدة
-      </div>
-    );
-
-  const readNotification = async (notificationId: string) => {
-    await axiosInstance.put(`api/notifications/${notificationId}/read`);
-    getAllNotifiactions(userData.id);
-  };
-
   return (
     <nav className="navbar">
       <h1>📘 My Blog</h1>
@@ -121,13 +78,10 @@ const Navbar = () => {
         )}
         {userData.id && (
           <div style={{ position: "relative" }}>
-            <i
-              className="fa-solid fa-bell fa-2x"
-              onClick={() => setNotificationDropDown((prev) => !prev)}
-            ></i>
-            {notificationDropDown && (
-              <div className="notificationDropdown">{notificationContent}</div>
-            )}
+            <Notifications
+              notificationDropDown={notificationDropDown}
+              setNotificationDropDown={setNotificationDropDown}
+            />
           </div>
         )}
       </div>

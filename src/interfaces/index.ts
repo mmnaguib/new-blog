@@ -1,5 +1,5 @@
 export interface IPost {
-  _id: string | number;
+  _id: string;
   title: string;
   content: string;
   authorId: IUser;
@@ -13,8 +13,8 @@ export interface IPost {
 }
 
 export interface IComment {
-  _id: string | number;
-  postId: string | number;
+  _id: string;
+  postId: string;
   userId: {
     _id: string;
     username: string;
