@@ -1,20 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
-import { RadioGroup } from "devextreme-react";
+import { RadioGroup, TextBox } from "devextreme-react";
 import { postTypes, sortPosts } from "../../utils/data";
-const Sidebar = () => {
-  const [selectedType, setSelectedType] = React.useState(1);
-  const [sortPost, setSortPost] = React.useState(1);
+import { IPost } from "../../interfaces";
+
+const Sidebar = ({
+  setPosts,
+  allPosts,
+}: {
+  setPosts: any;
+  allPosts: IPost[];
+}) => {
+  const [selectedType, setSelectedType] = useState<string>("");
+  const [sortPost, setSortPost] = useState<number | string>("");
+  const [search, setSearch] = useState<string>("");
+
+  // دي أهم دالة - بتعمل فلترة وترتيب مع بعض
+  const filterAndSortPosts = (
+    searchValue: string,
+    type: string,
+    sort: number | string
+  ) => {
+    let filteredPosts = [...allPosts];
+
+    // فلترة بالبحث
+    if (searchValue) {
+      filteredPosts = filteredPosts.filter((post) =>
+        post.title.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
+
+    // فلترة بالنوع
+    if (type) {
+      filteredPosts = filteredPosts.filter((post) => post.type === type);
+    }
+
+    // ترتيب
+    if (sort === 1) {
+      filteredPosts.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+    } else if (sort === 2) {
+      filteredPosts.sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      );
+    }
+
+    setPosts(filteredPosts);
+  };
+
+  const handleSearch = (e: any) => {
+    const searchValue = e.component.option("value");
+    setSearch(searchValue);
+    filterAndSortPosts(searchValue, selectedType, sortPost);
+  };
+
+  const handleTypeChange = (e: any) => {
+    const selected = e.value;
+    setSelectedType(selected);
+    filterAndSortPosts(search, selected, sortPost);
+  };
+
+  const handleSortPost = (e: any) => {
+    const selected = e.value;
+    setSortPost(selected);
+    filterAndSortPosts(search, selectedType, selected);
+  };
+
   return (
     <div className="sidebar">
+      <TextBox
+        value={search}
+        onValueChanged={handleSearch}
+        valueChangeEvent="input" // عشان يبدأ أول ما تكتب
+        placeholder="ابحث عن منشور"
+      />
       <div>
         <label className="sidebar-label">اختر نوع المنشور</label>
         <RadioGroup
           dataSource={postTypes}
-          defaultValue={selectedType}
-          onValueChanged={(e) => setSelectedType(e.value)}
+          value={selectedType}
+          onValueChanged={handleTypeChange}
           layout="vertical"
-          valueExpr="ID"
+          valueExpr="type"
           displayExpr="type"
         />
       </div>
@@ -23,11 +91,11 @@ const Sidebar = () => {
         <label className="sidebar-label">ترتيب المنشورات</label>
         <RadioGroup
           dataSource={sortPosts}
-          defaultValue={sortPost}
-          onValueChanged={(e) => setSortPost(e.value)}
+          value={sortPost}
+          onValueChanged={handleSortPost}
           layout="vertical"
           valueExpr="ID"
-          displayExpr="type"
+          displayExpr="sort"
         />
       </div>
     </div>

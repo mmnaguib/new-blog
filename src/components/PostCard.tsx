@@ -1,6 +1,6 @@
 import { IPost } from "../interfaces";
 import FaceBook from "../assetst/facebook.jpeg";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "devextreme-react";
 import { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
@@ -29,17 +29,26 @@ const PostCard = ({ post }: { post: IPost }) => {
         <span className="blog-date">
           {new Date(post.date).toLocaleDateString("ar-EG")}
         </span>
-        <span className="blog-title">
+        <Link to={`/${post._id}`} className="blog-title">
           {post.title.length > 30
             ? post.title.slice(0, 20) + "..."
             : post.title}
-        </span>
+        </Link>
         <span className="blog-paragraph">
           {post.content.length > 70
             ? post.content.slice(0, 70) + "..."
             : post.content}
         </span>
-        <span>{post.reactions.length}</span> // {count}
+        <div className="blog-reactions">
+          <span style={{ borderRadius: "0 25px 25px 0" }}>
+            <i className="fa-solid fa-comment"></i>
+            {post.reactions.length}
+          </span>
+          <span style={{ borderRadius: "25px 0 0 25px" }}>
+            <i className="fa-solid fa-thumbs-up"></i>
+            {count}
+          </span>
+        </div>
         {post.content.length > 70 && (
           <Button
             text="READ MORE"
@@ -49,15 +58,17 @@ const PostCard = ({ post }: { post: IPost }) => {
             className="blogButton"
           />
         )}
-        <a href={post.facebookProfile} target="_blank" rel="noreferrer">
-          <img
-            className="facebookImage"
-            src={FaceBook}
-            width={30}
-            height={30}
-            alt="facebook logo"
-          />
-        </a>
+        {post.type === "شخصي" && (
+          <a href={post.facebookProfile} target="_blank" rel="noreferrer">
+            <img
+              className="facebookImage"
+              src={FaceBook}
+              width={30}
+              height={30}
+              alt="facebook logo"
+            />
+          </a>
+        )}
       </div>
     </>
   );

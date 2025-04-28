@@ -1,9 +1,7 @@
 .blogs-Containter {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 60px;
-  width: 95%;
-  margin: auto;
+  gap: 30px;
+  margin-right: 170px;
 }
 
 @media screen and (max-width: 600px) {
@@ -27,17 +25,17 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: -30px;
+  left: 0;
   z-index: 1;
   width: 150px;
   height: 150px;
-  object-fit: contain;
+  object-fit: fill;
   border-radius: 8px;
 }
 
 .facebookImage {
   position: absolute;
-  left: -30px;
+  left: 0;
   z-index: 1;
   bottom: 0;
   border-radius: 50%;
@@ -45,8 +43,8 @@
 
 .blogButton {
   position: absolute;
-  bottom: 20px;
-  left: 130px;
+  bottom: 30px;
+  left: 170px;
   border-radius: 25px !important;
   border-color: #5cb85c !important;
 }
@@ -67,20 +65,20 @@
   margin: 5px 0;
   display: block;
   color: #1d4ed8;
-  min-width: calc(380px - 140px);
-  max-width: calc(480px - 140px);
+  width: 80%;
+  text-decoration: none;
 }
 .blog-paragraph {
+  min-height: 70px;
   max-height: 70px;
   display: block;
   line-height: 1.5;
   letter-spacing: 0.5px;
-  min-width: calc(380px - 140px);
-  max-width: calc(480px - 140px);
   font-size: 18px;
+  width: 80%;
+  word-break: break-word;
 }
 
-/**/
 .reaction-container {
   position: relative;
   display: inline-block;
@@ -114,7 +112,7 @@
   bottom: 2%;
   right: 2%;
 }
-.postAction .dx-popup-content {
+.commentsContainer .dx-popup-content {
   max-height: 350px !important;
 }
 
@@ -204,3 +202,34 @@
   bottom: -20px;
   left: -20px;
 } */
+
+.blog-reactions {
+  position: absolute;
+  bottom: 30px;
+  border: 1px solid #eaeaea;
+  left: 300px;
+  border-radius: 25px;
+}
+
+.blog-reactions span {
+  padding: 6px 20px;
+  display: inline-block;
+  border: 1px solid #eaeaea;
+}
+
+.blog-reactions i {
+  margin-left: 6px;
+}
+
+.loginToReact {
+  position: absolute;
+  left: 0;
+  padding: 20px;
+  box-shadow: 0 0 5px 1px #eaeaea;
+  width: 100%;
+  text-align: center;
+}
+
+.loginToReact a {
+  text-decoration: none;
+}

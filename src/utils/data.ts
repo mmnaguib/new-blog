@@ -7,8 +7,8 @@ export const postTypes = [
 ];
 
 export const sortPosts = [
-  { ID: 1, type: "من الاقدم" },
-  { ID: 2, type: "من الاحدث" },
+  { ID: 1, sort: "من الاقدم" },
+  { ID: 2, sort: "من الاحدث" },
 ];
 
 export const gridTabs = [

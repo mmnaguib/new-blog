@@ -49,4 +49,13 @@ export interface IProfile {
     phone?: string;
   };
 }
+export interface INotification {
+  _id: string;
+  date: string;
+  isRead: boolean;
+  message: string;
+  postId: string;
+  type: string;
+  userId: string;
+}
 export const checkLogin = localStorage.getItem("newBlogToken") ? true : false;

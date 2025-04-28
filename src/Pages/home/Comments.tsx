@@ -59,7 +59,7 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
   };
 
   return (
-    <>
+    <div className="commentsContainer">
       <Popup
         visible={isOpen}
         onHiding={() => setIsOpen(false)}
@@ -154,7 +154,7 @@ const Comments = ({ isOpen, setIsOpen, id }: IProps) => {
           </form>
         </div>
       </Popup>
-    </>
+    </div>
   );
 };
 

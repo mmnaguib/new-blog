@@ -1,10 +1,8 @@
 import { Button } from "devextreme-react";
 import DataGrid, { Column } from "devextreme-react/data-grid";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IPost } from "../../interfaces";
 import postsApi from "../../services/posts";
-import { gridTabs } from "../../utils/data";
-import { useNavigate } from "react-router-dom";
 import NewPost from "../home/NewPost";
 import EditBlog from "../home/EditBlog";
 import axiosInstance from "../../utils/axiosInstance";
@@ -15,7 +13,6 @@ const PostsGrid = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [editPost, setEditPost] = useState("");
-  const navigate = useNavigate();
 
   const getAllPosts = async () => {
     const res = await postsApi.getPosts();
@@ -27,7 +24,7 @@ const PostsGrid = () => {
 
   const handlePostEdit = (val: string) => {
     setEditPost(val);
-    setIsOpen(true);
+    setIsOpenEdit(true);
   };
 
   const deletePost = async (val: string) => {

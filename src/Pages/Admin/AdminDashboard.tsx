@@ -1,6 +1,4 @@
-import { Button, DataGrid, TabPanel } from "devextreme-react";
-import { Column } from "devextreme-react/data-grid";
-import { useNavigate } from "react-router-dom";
+import { TabPanel } from "devextreme-react";
 import { gridTabs } from "../../utils/data";
 import PostsGrid from "./PostsGrid";
 import UserGrid from "./UserGrid";
@@ -56,7 +54,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const navigate = useNavigate();
   return (
     <div className="p-4">
       <h2 className="pageHeader">لوحة تحكم الأدمن</h2>

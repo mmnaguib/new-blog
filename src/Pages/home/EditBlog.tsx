@@ -8,7 +8,7 @@ import {
   TextBox,
 } from "devextreme-react";
 import React, { useEffect, useState } from "react";
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axiosInstance from "../../utils/axiosInstance";
 import { availableTags } from "../../utils/data";

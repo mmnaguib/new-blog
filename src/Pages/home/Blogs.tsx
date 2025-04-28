@@ -4,19 +4,25 @@ import "./home.css";
 import { IPost } from "../../interfaces";
 import postsApi from "../../services/posts";
 import Sidebar from "../../components/sideBar/Sidebar";
+
 const Home = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
+  const [allPosts, setAllPosts] = useState<IPost[]>([]);
+
   const getAllPosts = async () => {
     const res = await postsApi.getPosts();
     setPosts(res);
+    setAllPosts(res);
   };
+
   useEffect(() => {
     getAllPosts();
   }, []);
+
   return (
     <>
       <div className="p-4">
-        <Sidebar />
+        <Sidebar setPosts={setPosts} allPosts={allPosts} />
         <h2 className="pageHeader">أحدث المنشورات</h2>
         <div className="blogs-Containter">
           {posts.map((post) => (
