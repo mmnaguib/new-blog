@@ -32,7 +32,7 @@ export interface IReaction {
 }
 
 export interface IUser {
-  _id: number;
+  _id: string;
   username: string;
   email: string;
   password: string;
