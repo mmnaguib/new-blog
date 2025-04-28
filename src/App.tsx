@@ -9,6 +9,7 @@ import Blog from "./Pages/home/Blog";
 import { ToastContainer } from "react-toastify";
 import Profile from "./Pages/profile/Profile";
 import UserProfile from "./Pages/profile/User";
+import Chat from "./Pages/Chat/Chat";
 function App() {
   return (
     <>
@@ -23,6 +24,7 @@ function App() {
             <Route path="/:id" element={<Blog />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="user/:id" element={<UserProfile />} />
+            <Route path="/chat" element={<Chat />} />
             {/* Add other routes here */}
           </Routes>
         </div>
