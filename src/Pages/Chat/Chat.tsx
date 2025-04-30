@@ -1,62 +1,101 @@
 import React, { useEffect, useState } from "react";
 import socket from "../../socket";
+import axiosInstance from "../../utils/axiosInstance";
+import { userData } from "../../utils/data";
+import ConversationsList from "../../components/chat/ConversationsList";
 
 const Chat = () => {
+  const [selectedUser, setSelectedUser] = useState<{
+    _id: string;
+    username: string;
+  } | null>(null);
+  const [conversationId, setConversationId] = useState("");
+  const [messages, setMessages] = useState<
+    {
+      sender: { _id: string; username: string };
+      text: string;
+      conversationId: string;
+    }[]
+  >([]);
   const [message, setMessage] = useState("");
-  const [chatMessages, setChatMessages] = useState<
-    { senderId: string; text: string }[]
+  const [onlineUsers, setOnlineUsers] = useState<
+    { _id: string; username: string }[]
   >([]);
 
-  const userId = "123"; // خلي دي تيجي من الـ userData بتاعك طبعا
+  const handleSelectUser = async (user: any) => {
+    setSelectedUser(user);
+    const res = await axiosInstance.post("/api/conversations", {
+      senderId: userData.id,
+      receiverId: user._id,
+    });
+    setConversationId(res.data._id);
+    socket.emit("joinConversation", res.data._id);
+    fetchMessages(res.data._id);
+  };
+
+  const fetchMessages = async (convId: string) => {
+    const res = await axiosInstance.get(`/api/messages/${convId}`);
+    setMessages(res.data);
+  };
+
+  const sendMessage = () => {
+    if (!message.trim()) return;
+    const newMessage = {
+      conversationId,
+      sender: userData.id,
+      receiverId: selectedUser?._id,
+      text: message,
+    };
+    socket.emit("sendMessage", newMessage);
+    setMessage("");
+  };
 
   useEffect(() => {
-    socket.on("getMessage", (data) => {
-      console.log("📥 رسالة جاية:", data);
-      setChatMessages((prev) => [
-        ...prev,
-        { senderId: data.senderId, text: data.text },
-      ]);
+    socket.emit("join", userData.id);
+
+    socket.on("getMessage", (msg) => {
+      if (msg.conversationId === conversationId) {
+        setMessages((prev) => [...prev, msg]);
+      }
+    });
+
+    socket.on("updateOnlineUsers", (users) => {
+      setOnlineUsers(users);
     });
 
     return () => {
-      socket.off("getMessage"); // تنظيف بعد ما نخرج من الصفحة
+      socket.off("getMessage");
+      socket.off("updateOnlineUsers");
     };
-  }, []);
-
-  const handleSendMessage = () => {
-    if (message.trim() !== "") {
-      socket.emit("sendMessage", {
-        senderId: userId,
-        receiverId: "456", // ID بتاع الشخص اللي انت بتكلمه
-        text: message,
-      });
-      setMessage("");
-    }
-  };
+  }, [conversationId]);
 
   return (
-    <div>
-      <h2>الدردشة</h2>
-      <div
-        style={{
-          border: "1px solid gray",
-          padding: "10px",
-          marginBottom: "10px",
-        }}
-      >
-        {chatMessages.map((msg, index) => (
-          <div key={index}>
-            <b>{msg.senderId}</b>: {msg.text}
-          </div>
-        ))}
+    <div className="chat-container">
+      <ConversationsList selectConversation={handleSelectUser} />
+      <div className="chat-box">
+        <h3>الدردشة مع: {selectedUser?.username || "..."}</h3>
+        <div className="chat-messages">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`message-box ${
+                msg.sender._id === userData.id ? "my-message" : "their-message"
+              }`}
+            >
+              <p>{msg.text}</p>
+              <small>{msg.sender.username}</small>
+            </div>
+          ))}
+        </div>
+        <div className="chat-input">
+          <input
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="اكتب رسالة"
+          />
+          <button onClick={sendMessage}>إرسال</button>
+        </div>
       </div>
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="اكتب رسالتك..."
-      />
-      <button onClick={handleSendMessage}>إرسال</button>
     </div>
   );
 };

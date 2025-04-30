@@ -3,9 +3,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "./navbar.css";
 import { DropDownButton } from "devextreme-react";
 import { profileMenuItems } from "../../utils/data";
-import axiosInstance from "../../utils/axiosInstance";
-import { INotification } from "../../interfaces";
-import { getTimeDifference } from "../../utils";
 import Notifications from "./Notifications";
 
 const Navbar = () => {

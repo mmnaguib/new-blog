@@ -15,7 +15,6 @@ const Sidebar = ({
   const [sortPost, setSortPost] = useState<number | string>("");
   const [search, setSearch] = useState<string>("");
 
-  // دي أهم دالة - بتعمل فلترة وترتيب مع بعض
   const filterAndSortPosts = (
     searchValue: string,
     type: string,
@@ -23,19 +22,16 @@ const Sidebar = ({
   ) => {
     let filteredPosts = [...allPosts];
 
-    // فلترة بالبحث
     if (searchValue) {
       filteredPosts = filteredPosts.filter((post) =>
         post.title.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
 
-    // فلترة بالنوع
-    if (type) {
+    if (type && type !== "الكل") {
       filteredPosts = filteredPosts.filter((post) => post.type === type);
     }
 
-    // ترتيب
     if (sort === 1) {
       filteredPosts.sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
