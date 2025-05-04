@@ -3,7 +3,9 @@ import socket from "../../socket";
 import axiosInstance from "../../utils/axiosInstance";
 import { userData } from "../../utils/data";
 import ConversationsList from "../../components/chat/ConversationsList";
-
+import "./chat.css";
+import { Button } from "devextreme-react";
+import { V } from "framer-motion/dist/types.d-B1Voffvi";
 const Chat = () => {
   const [selectedUser, setSelectedUser] = useState<{
     _id: string;
@@ -12,6 +14,7 @@ const Chat = () => {
   const [conversationId, setConversationId] = useState("");
   const [messages, setMessages] = useState<
     {
+      _id: string;
       sender: { _id: string; username: string };
       text: string;
       conversationId: string;
@@ -69,11 +72,60 @@ const Chat = () => {
     };
   }, [conversationId]);
 
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await axiosInstance.delete(`api/messages/${id}`);
+      console.log(res);
+      setMessages((prev) => prev.filter((msg) => msg._id !== id));
+    } catch (err) {
+      console.error("خطأ في حذف الرسالة:", err);
+    }
+  };
+
+  const handleEdit = (msg: any) => {
+    const newText = prompt("تعديل الرسالة:", msg.text);
+    if (newText && newText !== msg.text) {
+      axiosInstance
+        .put(`/api/messages/${msg._id}`, { text: newText })
+        .then((res) => {
+          setMessages((prev) =>
+            prev.map((m) => (m._id === msg._id ? res.data : m))
+          );
+        })
+        .catch((err) => {
+          console.error("خطأ في تعديل الرسالة:", err);
+        });
+    }
+  };
+
+  const handleDeleteConversation = async () => {
+    if (!conversationId) return;
+
+    try {
+      await axiosInstance.delete(`/api/conversations/${conversationId}`);
+      setMessages([]);
+      alert("تم حذف المحادثة");
+    } catch (err) {
+      console.error("❌ خطأ في حذف المحادثة:", err);
+    }
+  };
+
   return (
     <div className="chat-container">
       <ConversationsList selectConversation={handleSelectUser} />
       <div className="chat-box">
-        <h3>الدردشة مع: {selectedUser?.username || "..."}</h3>
+        <h3 style={{ marginTop: 0, position: "relative" }}>
+          الدردشة مع: {selectedUser?.username || "..."}
+          {conversationId && messages.length > 0 && (
+            <Button
+              type="danger"
+              onClick={handleDeleteConversation}
+              style={{ position: "absolute", left: 0 }}
+              icon="trash"
+              text="حذف المحادثة"
+            />
+          )}
+        </h3>
         <div className="chat-messages">
           {messages.map((msg, index) => (
             <div
@@ -83,7 +135,29 @@ const Chat = () => {
               }`}
             >
               <p>{msg.text}</p>
-              <small>{msg.sender.username}</small>
+              {msg.sender._id === userData.id && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                  }}
+                >
+                  <Button
+                    stylingMode="outlined"
+                    onClick={() => handleEdit(msg)}
+                  >
+                    تعديل
+                  </Button>
+                  <Button
+                    stylingMode="outlined"
+                    onClick={() => handleDelete(msg._id)}
+                  >
+                    حذف
+                  </Button>
+                </div>
+              )}
             </div>
           ))}
         </div>

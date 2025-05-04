@@ -124,6 +124,11 @@ const Blog = () => {
                 )}
               </AnimatePresence>
             </div>
+            <div>
+              <Link to="/chat">
+                <i className="fa-brands fa-facebook-messenger fa-2x"></i>
+              </Link>
+            </div>
           </div>
           <Comments isOpen={isOpen} setIsOpen={setIsOpen} id={id!} />
         </>

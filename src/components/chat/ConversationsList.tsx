@@ -14,7 +14,6 @@ const ConversationsList = ({
   >([]);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
 
-  // جلب قائمة المستخدمين (عدا المستخدم الحالي)
   useEffect(() => {
     const fetchUsers = async () => {
       const res = await axiosInstance.get("/api/auth/users");
@@ -26,7 +25,6 @@ const ConversationsList = ({
     fetchUsers();
   }, []);
 
-  // متابعة المستخدمين الأونلاين
   useEffect(() => {
     socket.emit("getOnlineUsers");
 
@@ -39,32 +37,20 @@ const ConversationsList = ({
     };
   }, []);
 
-  const isOnline = (id: string) => onlineUsers.includes(id); // تحقق إذا كان المستخدم أونلاين
+  const isOnline = (id: string) => onlineUsers.includes(id);
 
   return (
-    <div style={{ width: "250px", borderRight: "1px solid #ccc" }}>
+    <div className="chatSidebar">
       <h3>المستخدمون</h3>
       {users.map((user) => (
         <div
           key={user._id}
           onClick={() => selectConversation(user)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            cursor: "pointer",
-            padding: "10px",
-            borderBottom: "1px solid #eee",
-          }}
+          className="userBox"
         >
           <img
             src={user.image ? baseURL + "/uploads/" + user.image : UserIcon}
             alt="avatar"
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              marginRight: "10px",
-            }}
           />
           <div>
             <div style={{ fontWeight: "bold" }}>{user.username}</div>
@@ -74,7 +60,7 @@ const ConversationsList = ({
                 fontSize: "12px",
               }}
             >
-              {isOnline(user._id) ? "متصل الآن" : "غير متصل"}
+              {isOnline(user._id) && <span className="onlineNow"></span>}
             </div>
           </div>
         </div>
